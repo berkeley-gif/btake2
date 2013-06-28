@@ -11,11 +11,11 @@ class Bee
     @service_name = 'Web Service'
     @timeout ||= 5
     @method_param ||= 'function'
-    @default_params = {:format => 'json'}
+    @default_params = {:format => 'geojson'}
     # @debug = options[:debug]
     @debug = true
   end
-  
+
   def request(method, params = {})
     params      = params.merge(@default_params)
     uri = if params.blank?
@@ -34,8 +34,8 @@ class Bee
       timed_out = Timeout::timeout(@timeout) do
         response = Net::HTTP.start(request_uri.host) do |http|
           puts "MetaService getting #{request_uri.host}#{request_uri.path}?#{request_uri.query}" if @debug
-          http.get("#{request_uri.path}?#{request_uri.query}", 
-            'User-Agent' => "#{self.class}/#{SERVICE_VERSION}", 
+          http.get("#{request_uri.path}?#{request_uri.query}",
+            'User-Agent' => "#{self.class}/#{SERVICE_VERSION}",
             'Content-Type' => 'application/json',
             'Accept' => 'application/json')
         end
